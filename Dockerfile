@@ -1,2 +1,2 @@
-# Comment
-RUN echo 'we are running some # of cool things'
+FROM polygott
+CMD run-project
