@@ -1,2 +1,2 @@
-FROM basicer/polygott
+FROM replco/polygott
 CMD run-project
