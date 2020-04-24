@@ -1,2 +1,3 @@
-FROM replco/polygott
-CMD run-project
+FROM node
+CMD npm install
+CMD node index.js
