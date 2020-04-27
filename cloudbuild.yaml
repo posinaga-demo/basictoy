@@ -18,32 +18,8 @@
 
  # Deploy webapp to a temp service
  - name: 'gcr.io/cloud-builders/gcloud'
-   args:
-   - 'run'
-   - 'deploy'
-   - 'basictoy-$COMMIT_SHA'
-   - '--image'
-   - 'gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA'
-   - '--region'
-   - 'us-east4'
-   - '--platform'
-   - 'managed'
-   - '--port'
-   - '3000'
-   - '--allow-unauthenticated'
+   args: ['run', 'deploy', 'basictoy-$COMMIT_SHA', '--image', 'gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA', '--region', 'us-east4', '--platform', 'managed', '--port', '3000', '--allow-unauthenticated']
 
 # Deploy integration-load-tests to a temp service
-- name: 'gcr.io/cloud-builders/gcloud'
-   args:
-   - 'run'
-   - 'deploy'
-   - 'basictoy-integration-load-tests-$COMMIT_SHA'
-   - '--image'
-   - 'gcr.io/$PROJECT_ID/basictoy-integration-load-tests:$COMMIT_SHA'
-   - '--region'
-   - 'us-east4'
-   - '--platform'
-   - 'managed'
-   - '--port'
-   - '8089'
-   - '--allow-unauthenticated'
+ - name: 'gcr.io/cloud-builders/gcloud'
+   args: ['run', 'deploy', 'basictoy-integration-load-tests-$COMMIT_SHA', '--image', 'gcr.io/$PROJECT_ID/basictoy-integration-load-tests:$COMMIT_SHA', '--region', 'us-east4', '--platform', 'managed', '--port', '8089', '--allow-unauthenticated']
