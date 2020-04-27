@@ -1,3 +1,3 @@
 FROM locustio/locust
 ADD load-tests/locustfile.py locustfile.py
-# CMD ["locust"]
+CMD ["-host https://www.google.com"]
