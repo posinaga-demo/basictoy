@@ -8,18 +8,18 @@
  - name: 'gcr.io/cloud-builders/docker'
    args: ['push', 'gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA']
 
-# build the integration-load-tests container image
+# build the integration load-tests container image
  - name: 'gcr.io/cloud-builders/docker'
-   args: ['build', '-f', 'integration-load-tests/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/basictoy-integration-load-tests:$COMMIT_SHA', '.']
+   args: ['build', '-f', 'load-tests/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/basictoy-load-tests:$COMMIT_SHA', '.']
 
- # push the integration-load-tests container image to Container Registry
+ # push the integration load-tests container image to Container Registry
  - name: 'gcr.io/cloud-builders/docker'
-   args: ['push', 'gcr.io/$PROJECT_ID/basictoy-integration-load-tests:$COMMIT_SHA']
+   args: ['push', 'gcr.io/$PROJECT_ID/basictoy-load-tests:$COMMIT_SHA']
 
  # Deploy webapp to a temp service
  - name: 'gcr.io/cloud-builders/gcloud'
    args: ['run', 'deploy', 'basictoy-$COMMIT_SHA', '--image', 'gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA', '--region', 'us-east4', '--platform', 'managed', '--port', '3000', '--allow-unauthenticated']
 
-# Deploy integration-load-tests to a temp service
+# Deploy integration load-tests to a temp service
  - name: 'gcr.io/cloud-builders/gcloud'
-   args: ['run', 'deploy', 'basictoy-integration-load-tests-$COMMIT_SHA', '--image', 'gcr.io/$PROJECT_ID/basictoy-integration-load-tests:$COMMIT_SHA', '--region', 'us-east4', '--platform', 'managed', '--port', '8089', '--allow-unauthenticated']
+   args: ['run', 'deploy', 'basictoy-load-tests-$COMMIT_SHA', '--image', 'gcr.io/$PROJECT_ID/basictoy-load-tests:$COMMIT_SHA', '--region', 'us-east4', '--platform', 'managed', '--port', '8089', '--allow-unauthenticated']
