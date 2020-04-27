@@ -10,7 +10,7 @@
    args:
    - 'run'
    - 'deploy'
-   - 'basictoy-$COMMIT_SHA'
+   - 'basictoy'
    - '--image'
    - 'gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA'
    - '--region'
@@ -22,7 +22,7 @@
    - 'run'
    - 'services'
    - 'update-traffic'
-   - 'basictoy-$COMMIT_SHA'
+   - 'basictoy'
    - '--to-latest'
    - '--region'
    - 'us-east4'
