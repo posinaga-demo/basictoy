@@ -22,6 +22,7 @@
    - 'managed'
    - '--port'
    - '3000'
+   - '--allow-unauthenticated'
 
  # Make latest revision in temp service receive traffic (needed for new services?)
  - name: 'gcr.io/cloud-builders/gcloud'
