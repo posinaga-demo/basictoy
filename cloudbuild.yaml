@@ -25,17 +25,17 @@
    - '--allow-unauthenticated'
 
  # Make latest revision in temp service receive traffic (needed for new services?)
- - name: 'gcr.io/cloud-builders/gcloud'
-   args:
-   - 'run'
-   - 'services'
-   - 'update-traffic'
-   - 'basictoy-$COMMIT_SHA'
-   - '--to-latest'
-   - '--region'
-   - 'us-east4'
-   - '--platform'
-   - 'managed'
+ #- name: 'gcr.io/cloud-builders/gcloud'
+ #  args:
+ #  - 'run'
+ #  - 'services'
+ #  - 'update-traffic'
+ #  - 'basictoy-$COMMIT_SHA'
+ #  - '--to-latest'
+ #  - '--region'
+ #  - 'us-east4'
+ #  - '--platform'
+ #  - 'managed'
 
  images:
  - 'gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA'
