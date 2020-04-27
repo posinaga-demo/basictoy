@@ -1,3 +1,3 @@
 FROM locustio/locust
-ADD locustfile.py locustfile.py
+ADD integration-load-tests/locustfile.py locustfile.py
 CMD ["locust", "", ]
