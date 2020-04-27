@@ -14,7 +14,7 @@
 
  # push the integration-load-tests container image to Container Registry
  - name: 'gcr.io/cloud-builders/docker'
-   args: ['push', 'gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA']
+   args: ['push', 'gcr.io/$PROJECT_ID/basictoy-integration-load-tests:$COMMIT_SHA']
 
  # Deploy webapp to a temp service
  - name: 'gcr.io/cloud-builders/gcloud'
