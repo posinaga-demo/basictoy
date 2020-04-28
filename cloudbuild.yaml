@@ -63,7 +63,7 @@ steps:
         exit 0
       fi
 
-      case $_CICD_CONTEXT:
+      case $_CICD_CONTEXT in
         branch)
           $$_CLIENTS = 1
           $$_HATCH_RATE = 1
