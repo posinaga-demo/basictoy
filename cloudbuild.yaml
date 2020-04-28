@@ -22,7 +22,7 @@
 
 # Run integration load-tests
  - name: 'gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA'
-   args: '--host','https://google.com','--no-web','--clients','10','--hatch-rate','7','--run-time','30s']
+   args: ['--host','https://google.com','--no-web','--clients','10','--hatch-rate','7','--run-time','30s']
 #   env: 
 #   - 'TARGET_URL=https://google.com'
 
