@@ -43,14 +43,23 @@ steps:
       fi
 
       gcloud run deploy basictoy-$COMMIT_SHA --image gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA --region us-east4 --platform managed --port 3000 --allow-unauthenticated
+      if [ $? -ne 0 ]
+      then
+        echo error executing gcloud
+        exit 1
+      fi        
       gcloud run services describe basictoy-$COMMIT_SHA --platform managed --region us-east4 | grep Traffic | cut -c10-9999 > _webapp_service_url
+      if [ $? -ne 0 ]
+      then
+        echo error executing gcloud
+        exit 1
+      fi        
       echo DEPLOYED WEBAPP SERVICE - URL: $(cat _webapp_service_url)
 
   waitFor: ['push-webapp-image']
 
 # run integration load-tests
 # TODO: maybe this can be done w/o pulling from gcr (should be in the workspace? or simply passing the locustfile as param)
-# TODO: if locust is called with wrong params, no error is returned and build step succeeds (it shoudln't)
 - id: 'run-load-tests'
   name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
@@ -82,6 +91,11 @@ steps:
       esac
 
       docker run -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA locust --host $(cat _webapp_service_url) --no-web --clients $$CLIENTS --hatch-rate $$HATCH_RATE --run-time $$RUN_TIME
+      if [ $? -ne 0 ]
+      then
+        echo error executing docker/locust
+        exit 1
+      fi        
 
   waitFor: ['deploy-temp-webapp-service', 'push-load-test-image']
 
@@ -98,7 +112,11 @@ steps:
       then
         echo DELETING TEMP WEBAPP SERVICE - CICD CONTEXT IS branch
         gcloud run services delete basictoy-$COMMIT_SHA --retion us-east4 --platform managed --quite
-        exit 0
+        if [ $? -ne 0 ]
+        then
+          echo error executing gcloud
+          exit 1
+        fi        
       fi
 
   waitFor: ['run-load-tests']
@@ -118,6 +136,16 @@ steps:
       fi
 
       gcloud run deploy basictoy --image gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA --region us-east4 --platform managed
+      if [ $? -ne 0 ]
+      then
+        echo error executing gcloud
+        exit 1
+      fi        
       gcloud run services update-traffic basictoy --to-latest --region us-east4 --platform managed
+      if [ $? -ne 0 ]
+      then
+        echo error executing gcloud
+        exit 1
+      fi        
 
   waitFor: ['deploy-temp-webapp-service']
