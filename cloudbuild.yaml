@@ -64,12 +64,12 @@ steps:
       fi
 
       case $_CICD_CONTEXT:
-        "branch")
+        branch)
           $$_CLIENTS = 1
           $$_HATCH_RATE = 1
           $$_RUN_TIME = 5s
           ;;
-        "rc")
+        rc)
           $$_CLIENTS = 1000
           $$_HATCH_RATE = 1
           $$_RUN_TIME = 240s
