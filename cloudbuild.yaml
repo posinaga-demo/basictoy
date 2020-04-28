@@ -35,11 +35,4 @@
    args: 
     - '-c'
     - |
-      docker run -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA locust --host $(cat _webapp_service_url) --no-web --clients 10 --hatch-rate 7 --run-time 30s
-
-# Run integration load-tests
-# - name: 'gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA'
-#   args: ['locust','--host','https://google.com','--no-web','--clients','10','--hatch-rate','7','--run-time','30s']
-
-#   env: 
-#   - 'TARGET_URL=https://google.com'
+      docker run -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA locust --host $(cat _webapp_service_url) --no-web --clients 200 --hatch-rate 10 --run-time 120s
