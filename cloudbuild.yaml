@@ -69,8 +69,8 @@ steps:
 
       case $_CICD_CONTEXT in
         branch)
-          CLIENTS=1
-          HATCH_RATE=1
+          CLIENTS=5
+          HATCH_RATE=5
           RUN_TIME=5s
           ;;
         rc)
