@@ -55,5 +55,5 @@ steps:
 # delete temp web app service if lt was successful
 - id: 'delete-temp-webapp-service'
   name: 'gcr.io/cloud-builders/gcloud'
-  args: ['run', 'services', 'delete', 'basictoy-$COMMIT_SHA', '--region', 'us-east4', '--platform', 'managed']
+  args: ['run', 'services', 'delete', 'basictoy-$COMMIT_SHA', '--region', 'us-east4', '--platform', 'managed', '--quiet']
   waitFor: ['run-load-tests']
