@@ -1,5 +1,17 @@
 steps:
 
+# if needed, produce a release candidate
+# TODO: Somehow we need to figure out we already have a RC - currently we create the RC again becuase the merge commit is different
+- id: 'produce-rc'
+  name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - 'builds'
+  - 'submit'
+  - '--config'
+  - 'cloudbuild-release-candidate.yaml'
+  - '--substitutions'
+  - 'COMMIT_SHA=$COMMIT_SHA'
+
 # new revision for production service
 - id: 'new-revision'
   name: 'gcr.io/cloud-builders/gcloud'
