@@ -36,6 +36,8 @@ steps:
     - '-c'
     - |
 
+      set -e
+
       if [ $_CICD_CONTEXT == 'prod' ]
       then
         echo NO WEBAPP TEMP SERVICE WILL BE DEPLOYED FOR prod
@@ -43,17 +45,7 @@ steps:
       fi
 
       gcloud run deploy basictoy-$COMMIT_SHA --image gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA --region us-east4 --platform managed --port 3000 --allow-unauthenticated
-      if [ $? -ne 0 ]
-      then
-        echo error executing gcloud
-        exit 1
-      fi        
       gcloud run services describe basictoy-$COMMIT_SHA --platform managed --region us-east4 | grep Traffic | cut -c10-9999 > _webapp_service_url
-      if [ $? -ne 0 ]
-      then
-        echo error executing gcloud
-        exit 1
-      fi        
       echo DEPLOYED WEBAPP SERVICE - URL: $(cat _webapp_service_url)
 
   waitFor: ['push-webapp-image']
@@ -66,6 +58,8 @@ steps:
   args: 
     - '-c'
     - |
+
+      set -e
 
       if [ $_CICD_CONTEXT == 'prod' ]
       then
@@ -91,11 +85,6 @@ steps:
       esac
 
       docker run -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA locust --host $(cat _webapp_service_url) --no-web --clients $$CLIENTS --hatch-rate $$HATCH_RATE --run-time $$RUN_TIME
-      if [ $? -ne 0 ]
-      then
-        echo error executing docker/locust
-        exit 1
-      fi        
 
   waitFor: ['deploy-temp-webapp-service', 'push-load-test-image']
 
@@ -107,16 +96,13 @@ steps:
     - '-c'
     - |
 
+      set -e
+
       # only delete temp webapp service if in branch context and tests passed, otherwise keep it for debugging / manual testing
       if [ $_CICD_CONTEXT == 'branch' ]
       then
         echo DELETING TEMP WEBAPP SERVICE - CICD CONTEXT IS branch
         gcloud run services delete basictoy-$COMMIT_SHA --retion us-east4 --platform managed --quite
-        if [ $? -ne 0 ]
-        then
-          echo error executing gcloud
-          exit 1
-        fi        
       fi
 
   waitFor: ['run-load-tests']
@@ -129,6 +115,8 @@ steps:
     - '-c'
     - |
 
+      set -e
+
       if [ $_CICD_CONTEXT != 'prod' ]
       then
         echo NOT PROMOTING TO PRODUCTION - ONLY DOING IT WHEN CICD CONTEXT IS prod
@@ -136,16 +124,6 @@ steps:
       fi
 
       gcloud run deploy basictoy --image gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA --region us-east4 --platform managed
-      if [ $? -ne 0 ]
-      then
-        echo error executing gcloud
-        exit 1
-      fi        
       gcloud run services update-traffic basictoy --to-latest --region us-east4 --platform managed
-      if [ $? -ne 0 ]
-      then
-        echo error executing gcloud
-        exit 1
-      fi        
 
   waitFor: ['deploy-temp-webapp-service']
