@@ -50,6 +50,7 @@ steps:
 
 # run integration load-tests
 # TODO: maybe this can be done w/o pulling from gcr (should be in the workspace? or simply passing the locustfile as param)
+# TODO: if locust is called with wrong params, no error is returned and build step succeeds (it shoudln't)
 - id: 'run-load-tests'
   name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
@@ -65,14 +66,14 @@ steps:
 
       case $_CICD_CONTEXT in
         branch)
-          $$_CLIENTS = 1
-          $$_HATCH_RATE = 1
-          $$_RUN_TIME = 5s
+          _CLIENTS = 1
+          _HATCH_RATE = 1
+          _RUN_TIME = 5s
           ;;
         rc)
-          $$_CLIENTS = 1000
-          $$_HATCH_RATE = 1
-          $$_RUN_TIME = 240s
+          _CLIENTS = 1000
+          _HATCH_RATE = 1
+          _RUN_TIME = 240s
           ;;
         *)
           echo ERROR - UNKNOWN CICD CONTEXT
