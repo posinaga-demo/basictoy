@@ -20,6 +20,12 @@
  - name: 'gcr.io/cloud-builders/gcloud'
    args: ['run', 'deploy', 'basictoy-$COMMIT_SHA', '--image', 'gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA', '--region', 'us-east4', '--platform', 'managed', '--port', '3000', '--allow-unauthenticated']
 
+# Run integration load-tests
+ - name: 'gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA'
+   args: '--host','https://google.com','--no-web','--clients','10','--hatch-rate','7','--run-time','30s']
+#   env: 
+#   - 'TARGET_URL=https://google.com'
+
 # Deploy integration load-tests to a temp service
- - name: 'gcr.io/cloud-builders/gcloud'
-   args: ['run', 'deploy', 'basictoy-lt-$COMMIT_SHA', '--image', 'gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA', '--region', 'us-east4', '--platform', 'managed', '--port', '8089', '--allow-unauthenticated', '--set-env-vars', 'TARGET_URL=https://basictoy-bd48c73ccac8e00a98db307dda6af454160c42ba-xelnoqsdqa-uk.a.run.app', '--args', '--no-web,--clients,10,--hatch-rate,7,--run-time 10s']
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   args: ['run', 'deploy', 'basictoy-lt-$COMMIT_SHA', '--image', 'gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA', '--region', 'us-east4', '--platform', 'managed', '--port', '8089', '--allow-unauthenticated', '--set-env-vars', 'TARGET_URL=https://basictoy-bd48c73ccac8e00a98db307dda6af454160c42ba-xelnoqsdqa-uk.a.run.app', '--command', 'locust', '--args', '--no-web,--clients,10,--hatch-rate,7,--run-time 10s']
