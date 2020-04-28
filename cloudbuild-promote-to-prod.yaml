@@ -1,4 +1,4 @@
- steps:
+steps:
 
 # build and do integration testing
 - id: 'build-and-integration-test'
