@@ -29,11 +29,7 @@
       gcloud run services describe basictoy-$COMMIT_SHA --platform managed --region us-east4 | grep Traffic | cut -c10-9999 > _webapp_service_url
       echo captured web app service url: $(cat _webapp_service_url)
 
-#      echo "test-$(date +%s)" > _cluster-name
-#      gcloud container clusters create $(cat _cluster-name)
-
-
-# Run integration load-tests
+# run integration load-tests
 - name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
   args: 
