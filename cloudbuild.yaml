@@ -102,7 +102,7 @@ steps:
       if [ $_CICD_CONTEXT == 'branch' ]
       then
         echo DELETING TEMP WEBAPP SERVICE - CICD CONTEXT IS branch
-        gcloud run services delete basictoy-$COMMIT_SHA --retion us-east4 --platform managed --quite
+        gcloud run services delete basictoy-$COMMIT_SHA --region us-east4 --platform managed --quiet
       fi
 
   waitFor: ['run-load-tests']
