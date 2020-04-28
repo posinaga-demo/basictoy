@@ -30,12 +30,12 @@
       echo captured web app service url: $(cat _webapp_service_url)
 
 # run integration load-tests
- - name: 'gcr.io/cloud-builders/docker'
-  entrypoint: 'bash'
-  args: 
-  - '-c'
-  - |
-    docker run -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA locust --host https://google.com --no-web --clients 10 --hatch-rate 7 --run-time 30s
+  - name: 'gcr.io/cloud-builders/docker'
+   entrypoint: 'bash'
+   args: 
+    - '-c'
+    - |
+      docker run -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA locust --host https://google.com --no-web --clients 10 --hatch-rate 7 --run-time 30s
 
 # Run integration load-tests
 # - name: 'gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA'
