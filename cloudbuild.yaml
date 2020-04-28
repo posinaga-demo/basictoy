@@ -66,14 +66,14 @@ steps:
 
       case $_CICD_CONTEXT in
         branch)
-          _CLIENTS = 1
-          _HATCH_RATE = 1
-          _RUN_TIME = 5s
+          CLIENTS = 1
+          HATCH_RATE = 1
+          RUN_TIME = 5s
           ;;
         rc)
-          _CLIENTS = 1000
-          _HATCH_RATE = 1
-          _RUN_TIME = 240s
+          CLIENTS = 1000
+          HATCH_RATE = 1
+          RUN_TIME = 240s
           ;;
         *)
           echo ERROR - UNKNOWN CICD CONTEXT
@@ -81,7 +81,7 @@ steps:
           ;;
       esac
 
-      docker run -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA locust --host $(cat _webapp_service_url) --no-web --clients $$_CLIENTS --hatch-rate $$_HATCH_RATE --run-time $$_RUN_TIME
+      docker run -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA locust --host $(cat _webapp_service_url) --no-web --clients $$CLIENTS --hatch-rate $$HATCH_RATE --run-time $$RUN_TIME
 
       if [ $_CICD_CONTEXT == 'branch' ]
       then
