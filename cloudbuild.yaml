@@ -66,14 +66,14 @@ steps:
 
       case $_CICD_CONTEXT in
         branch)
-          CLIENTS = 1
-          HATCH_RATE = 1
-          RUN_TIME = 5s
+          CLIENTS=1
+          HATCH_RATE=1
+          RUN_TIME=5s
           ;;
         rc)
-          CLIENTS = 1000
-          HATCH_RATE = 1
-          RUN_TIME = 240s
+          CLIENTS=1000
+          HATCH_RATE=1
+          RUN_TIME=240s
           ;;
         *)
           echo ERROR - UNKNOWN CICD CONTEXT
@@ -83,6 +83,17 @@ steps:
 
       docker run -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA locust --host $(cat _webapp_service_url) --no-web --clients $$CLIENTS --hatch-rate $$HATCH_RATE --run-time $$RUN_TIME
 
+  waitFor: ['deploy-temp-webapp-service', 'push-load-test-image']
+
+# remove the temp webapp service
+- id: 'remove-temp-webapp-service'
+  name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args: 
+    - '-c'
+    - |
+
+      # only delete temp webapp service if in branch context and tests passed, otherwise keep it for debugging / manual testing
       if [ $_CICD_CONTEXT == 'branch' ]
       then
         echo DELETING TEMP WEBAPP SERVICE - CICD CONTEXT IS branch
@@ -90,7 +101,7 @@ steps:
         exit 0
       fi
 
-  waitFor: ['deploy-temp-webapp-service', 'push-load-test-image']
+  waitFor: ['run-load-tests']
 
 # promote service to production
 - id: 'promote-to-prod'
