@@ -11,8 +11,8 @@ steps:
     - '-c'
     - |
       LISTBUILD=$(gcloud builds list --filter="substitutions.COMMIT_SHA=$COMMIT_SHA AND STATUS=SUCCESS")
-      echo gcloud builds list command output: $LISTBUILD
-      if [[ ! -z "$LISTBUILD" ]]
+      echo gcloud builds list command output: $$LISTBUILD
+      if [[ ! -z "$$LISTBUILD" ]]
       then
         echo "A SUCCESSFUL BUILD WAS FOUND - NO NEED TO TO BUILD AND RUN INTEGRATION TESTS"
       else 
