@@ -9,6 +9,9 @@ steps:
       '--config=cloudbuild-integration.yaml',
       '.'
   ]
+  env:
+  - 'PROJECT_ID=$PROJECT_ID'
+  - 'COMMIT_SHA=$COMMIT_SHA'
 
 # new revision for production service
 - id: 'new-revision'
