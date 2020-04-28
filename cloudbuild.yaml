@@ -35,9 +35,17 @@ steps:
   args: 
     - '-c'
     - |
+
+      if [ $_CICD_CONTEXT == 'prod' ]
+      then
+        echo NO WEBAPP TEMP SERVICE WILL BE DEPLOYED FOR prod
+        exit 0
+      fi
+
       gcloud run deploy basictoy-$COMMIT_SHA --image gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA --region us-east4 --platform managed --port 3000 --allow-unauthenticated
       gcloud run services describe basictoy-$COMMIT_SHA --platform managed --region us-east4 | grep Traffic | cut -c10-9999 > _webapp_service_url
       echo DEPLOYED WEBAPP SERVICE - URL: $(cat _webapp_service_url)
+
   waitFor: ['push-webapp-image']
 
 # run integration load-tests
