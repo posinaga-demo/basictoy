@@ -3,13 +3,13 @@ steps:
 # build and do integration testing
 - id: 'build-and-integration-test'
   name: 'gcr.io/cloud-builders/gcloud'
-  env:
-  - 'PROJECT_ID=$PROJECT_ID'
-  - 'COMMIT_SHA=$COMMIT_SHA'
   args: [
       'builds', 
       'submit',
-      '--config=cloudbuild-integration.yaml',
+      '--config'
+      'cloudbuild-integration.yaml',
+      '--substitutions',
+      'COMMIT_SHA=$COMMIT_SHA',
       '.'
   ]
 
