@@ -6,7 +6,7 @@ steps:
   args: [
       'builds', 
       'submit',
-      '--config'
+      '--config',
       'cloudbuild-integration.yaml',
       '--substitutions',
       'COMMIT_SHA=$COMMIT_SHA',
