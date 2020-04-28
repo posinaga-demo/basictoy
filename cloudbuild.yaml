@@ -1,7 +1,7 @@
- steps:
+steps:
 
 # build the webapp container image
-- id: 'build webapp image'
+- id: 'build-webapp-image'
   name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA', '.']
   waitFor: ['-']
