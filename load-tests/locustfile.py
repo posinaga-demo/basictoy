@@ -12,4 +12,4 @@ class MyTaskSet(TaskSet):
 
 class User(HttpLocust):
     task_set = MyTaskSet
-    wait_time = between(5, 15)
+    wait_time = between(1, 2)
