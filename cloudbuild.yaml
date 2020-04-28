@@ -30,7 +30,8 @@
       echo captured web app service url: $(cat _webapp_service_url)
 
 # run integration load-tests
- - name: 'gcr.io/cloud-builders/docker'
+ - id: 'run-lt'
+   name: 'gcr.io/cloud-builders/docker'
    entrypoint: 'bash'
    args: 
     - '-c'
