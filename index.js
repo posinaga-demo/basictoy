@@ -9,14 +9,6 @@ app.get('/', (req, res) => {
   //res.status(500).send("tremendous error");
 });
 
-app.get('/about', (req, res) => {
-  if(Math.random()>0.1) {
-    res.render('about', {});
-  } else {
-    res.status(500).send("erratic error");
-  }
-});
-
 app.listen(3000, () => {
   console.log('server started');
 });

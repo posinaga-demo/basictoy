@@ -5,10 +5,6 @@ class MyTaskSet(TaskSet):
     def my_task(self):
         self.client.get("/")
         pass
-    @task
-    def about_task(self):
-        self.client.get("/about")
-        pass
     # @task
     # def my_failing_task(self):
     #     self.client.get("/pirulo")
