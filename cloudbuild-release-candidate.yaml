@@ -1,0 +1,18 @@
+steps:
+
+# if needed, build and do integration testing
+- id: 'build-and-integration-test'
+  name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args: 
+    - '-c'
+    - |
+      LISTBUILD=$(gcloud builds list --filter="substitutions.COMMIT_SHA=$COMMIT_SHA AND STATUS=SUCCESS")
+      echo gcloud builds list command output: $$LISTBUILD
+      if [[ ! -z "$$LISTBUILD" ]]
+      then
+        echo "A SUCCESSFUL BUILD WAS FOUND - NO NEED TO TO BUILD AND RUN INTEGRATION TESTS"
+      else 
+        echo "THE BUILD WAS NOT FOUND - NEED TO DO THE BUILD AND RUN INTEGRATION TESTS"
+        gcloud builds submit --config cloudbuild-integration.yaml --substitutions="COMMIT_SHA=$COMMIT_SHA"
+      fi
