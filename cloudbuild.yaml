@@ -36,6 +36,8 @@ steps:
     - '-c'
     - |
 
+      set -e
+
       if [ $_CICD_CONTEXT == 'prod' ]
       then
         echo NO WEBAPP TEMP SERVICE WILL BE DEPLOYED FOR prod
@@ -57,22 +59,24 @@ steps:
     - '-c'
     - |
 
+      set -e
+
       if [ $_CICD_CONTEXT == 'prod' ]
       then
         echo NO LOAD TESTS WILL BE RUN FOR prod
         exit 0
       fi
 
-      case $_CICD_CONTEXT:
-        "branch")
-          $$_CLIENTS = 1
-          $$_HATCH_RATE = 1
-          $$_RUN_TIME = 5s
+      case $_CICD_CONTEXT in
+        branch)
+          CLIENTS=1
+          HATCH_RATE=1
+          RUN_TIME=5s
           ;;
-        "rc")
-          $$_CLIENTS = 1000
-          $$_HATCH_RATE = 1
-          $$_RUN_TIME = 240s
+        rc)
+          CLIENTS=1000
+          HATCH_RATE=1
+          RUN_TIME=240s
           ;;
         *)
           echo ERROR - UNKNOWN CICD CONTEXT
@@ -80,16 +84,28 @@ steps:
           ;;
       esac
 
-      docker run -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA locust --host $(cat _webapp_service_url) --no-web --clients $$_CLIENTS --hatch-rate $$_HATCH_RATE --run-time $$_RUN_TIME
+      docker run -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA locust --host $(cat _webapp_service_url) --no-web --clients $$CLIENTS --hatch-rate $$HATCH_RATE --run-time $$RUN_TIME
 
+  waitFor: ['deploy-temp-webapp-service', 'push-load-test-image']
+
+# remove the temp webapp service
+- id: 'remove-temp-webapp-service'
+  name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args: 
+    - '-c'
+    - |
+
+      set -e
+
+      # only delete temp webapp service if in branch context and tests passed, otherwise keep it for debugging / manual testing
       if [ $_CICD_CONTEXT == 'branch' ]
       then
         echo DELETING TEMP WEBAPP SERVICE - CICD CONTEXT IS branch
-        gcloud run services delete basictoy-$COMMIT_SHA --retion us-east4 --platform managed --quite
-        exit 0
+        gcloud run services delete basictoy-$COMMIT_SHA --region us-east4 --platform managed --quiet
       fi
 
-  waitFor: ['deploy-temp-webapp-service', 'push-load-test-image']
+  waitFor: ['run-load-tests']
 
 # promote service to production
 - id: 'promote-to-prod'
@@ -98,6 +114,8 @@ steps:
   args: 
     - '-c'
     - |
+
+      set -e
 
       if [ $_CICD_CONTEXT != 'prod' ]
       then
