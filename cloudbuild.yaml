@@ -31,7 +31,7 @@ steps:
         exit 0
       fi
 
-      docker build -f load-tests/Dockerfile -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA
+      docker build -f load-tests/Dockerfile -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA .
 
   waitFor: ['-']
 
