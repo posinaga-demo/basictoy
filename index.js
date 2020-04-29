@@ -10,12 +10,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/about', (req, res) => {
-  if(Math.random()<0.3) {
-    res.status(500).send("somewhat erratic error");
-  } else {
     res.render('about', {});
-  }
+});
 
+app.get('/community', (req, res) => {
+  if(Math.random()<0.01) {
+    res.status(500).send("very erratic error");
+  } else {
+    res.render('community', {});
+  }
 });
 
 app.listen(3000, () => {
