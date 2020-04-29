@@ -18,14 +18,42 @@ steps:
 # TODO in some cases, this build may already exist - so we could skip
 - id: 'build-load-test-image'
   name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-f', 'load-tests/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA', '.']
+  entrypoint: 'bash'
+  args: 
+    - '-c'
+    - |
+
+      set -e
+
+      if [ $_CICD_CONTEXT == 'prod' ]
+      then
+        echo NOT DOING LOAD TESTING WHEN PROMOTING TO PROD
+        exit 0
+      fi
+
+      docker build -f load-tests/Dockerfile -t gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA
+
   waitFor: ['-']
 
 # push the integration load-tests container image to Container Registry
 # TODO in some cases, this build may already exist - so we could skip
 - id: 'push-load-test-image'
   name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA']
+  entrypoint: 'bash'
+  args: 
+    - '-c'
+    - |
+
+      set -e
+
+      if [ $_CICD_CONTEXT == 'prod' ]
+      then
+        echo NOT DOING LOAD TESTING WHEN PROMOTING TO PROD
+        exit 0
+      fi
+
+      docker push gcr.io/$PROJECT_ID/basictoy-lt:$COMMIT_SHA
+
   waitFor: ['build-load-test-image']
 
 # Deploy webapp to a temp service
@@ -63,7 +91,7 @@ steps:
 
       if [ $_CICD_CONTEXT == 'prod' ]
       then
-        echo NO LOAD TESTS WILL BE RUN FOR prod
+        echo NOT DOING LOAD TESTING WHEN PROMOTING TO PROD
         exit 0
       fi
 
@@ -128,4 +156,4 @@ steps:
       gcloud run deploy basictoy --image gcr.io/$PROJECT_ID/basictoy:$COMMIT_SHA --region us-east4 --platform managed
       gcloud run services update-traffic basictoy --to-latest --region us-east4 --platform managed
 
-  waitFor: ['deploy-temp-webapp-service']
+  waitFor: ['push-webapp-image']
