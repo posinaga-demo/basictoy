@@ -9,6 +9,15 @@ app.get('/', (req, res) => {
   //res.status(500).send("tremendous error");
 });
 
+app.get('/about', (req, res) => {
+  if(Math.random()<0.3) {
+    res.status(500).send("somewhat erratic error");
+  } else {
+    res.render('about', {});
+  }
+
+});
+
 app.listen(3000, () => {
   console.log('server started');
 });
